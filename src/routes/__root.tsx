@@ -147,7 +147,8 @@ function Shell() {
         {ready ? <Outlet /> : <div className="h-64 animate-pulse rounded-xl bg-muted" aria-label="불러오는 중" />}
       </main>
       <footer className="border-t border-border py-6 text-center text-xs text-muted-foreground">
-        KAI 기체제작 실무과정 학습 쇼케이스 · 로그인한 자료는 Supabase에 저장됩니다
+        <p>제작자 방시원</p>
+        <p className="mt-1">자료 출처 김형래 박사 『항공기술영어 회화 편』</p>
       </footer>
     </div>
   );
