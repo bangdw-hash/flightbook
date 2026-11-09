@@ -20,7 +20,7 @@ function Quiz() {
   const [msg, setMsg] = useState("");
   const start = () => {
     const q = buildQuiz(quizItems(dataset, notes, scope), type, 5);
-    if (!q.length) { setMsg("이 범위에서 만들 수 있는 유효한 문제가 없습니다. 자료를 더 불러오거나 다른 범위를 고르세요."); return; }
+    if (!q.length) { setMsg("이 범위에서 만들 수 있는 문제가 없습니다. 로그인 상태를 확인하거나 다른 범위를 고르세요."); return; }
     setMsg(""); setQs(q); setI(0); setAnswers([]); setInput("");
   };
   const answer = (a: string) => { setAnswers([...answers, a]); setInput(""); setI(i + 1); };

@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState, type ReactElement } from "react";
-import { Search, Upload, Compass } from "lucide-react";
+import { Search, Compass } from "lucide-react";
 import { useStore } from "@/lib/store";
 import { demoDataset, demoNotes } from "@/lib/demo";
 import { shortMeaning } from "@/lib/parser";
@@ -23,7 +23,7 @@ export const Route = createFileRoute("/")({
 type F = "all" | "patternItem" | "glossary" | "pattern" | "note";
 
 function Index() {
-  const { dataset, notes, setDataset, setNotes } = useStore();
+  const { dataset, notes, setDataset, setNotes, user } = useStore();
   const [q, setQ] = useState("");
   const [f, setF] = useState<F>("all");
   const rows = useMemo(() => {
@@ -54,12 +54,11 @@ function Index() {
         <h1 className="relative mt-2 font-serif text-3xl font-bold sm:text-4xl">항공영어 플라이트북</h1>
         <p className="relative mt-3 max-w-md opacity-90">현장 패턴영어와 용어를 한 권의 노트처럼 찾아보고, 복습하고, 테스트하세요.</p>
         <div className="relative mt-7 flex flex-col gap-2 sm:flex-row">
-          <button className="btn btn-teal" onClick={() => { setDataset(demoDataset()); if (!notes.length) setNotes(demoNotes()); }}>
+          {!user && <button className="btn btn-teal" onClick={() => { setDataset(demoDataset()); if (!notes.length) setNotes(demoNotes()); }}>
             <Compass className="h-4 w-4" aria-hidden /> 시연 데이터로 둘러보기
-          </button>
-          <Link to="/data" className="btn btn-ghost-ink"><Upload className="h-4 w-4" aria-hidden /> 교재 TXT 불러오기</Link>
+          </button>}
         </div>
-        <p className="relative mt-6 text-xs opacity-75">시연 데이터는 이 앱을 위해 새로 쓴 예문이며 실제 교재·작업 절차가 아닙니다. 로그인하면 불러온 자료와 기록을 Supabase에 저장하고 다른 기기에서 이어서 볼 수 있습니다.</p>
+        <p className="relative mt-6 text-xs opacity-75">상단에서 로그인하면 미리 등록된 교재가 자동으로 열립니다. 시연 자료는 로그인 없이 둘러볼 수 있습니다.</p>
       </section>
     );
 

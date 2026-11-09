@@ -15,6 +15,8 @@ const EMPTY: Persisted = { dataset: null, notes: [], patternMode: "book", glossa
 
 interface Store extends Persisted {
   user: User | null;
+  textbookAvailable: boolean;
+  hasCustomDataset: boolean;
   ready: boolean;
   saveError: string | null;
   saving: boolean;
@@ -44,6 +46,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
 function AccountStore({ user, authReady, children }: { user: User | null; authReady: boolean; children: ReactNode }) {
   const id = user?.id;
   const [state, setState] = useState<Persisted>(EMPTY);
+  const [textbook, setTextbook] = useState<Dataset | null>(null);
   const [loaded, setLoaded] = useState(!id);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
@@ -55,7 +58,10 @@ function AccountStore({ user, authReady, children }: { user: User | null; authRe
     if (!db || !id) return;
     let active = true;
     void (async () => {
-      const result = await db.from("flightbook_accounts").select("payload,revision").eq("owner_id", id).maybeSingle();
+      const [result, book] = await Promise.all([
+        db.from("flightbook_accounts").select("payload,revision").eq("owner_id", id).maybeSingle(),
+        db.from("flightbook_textbooks").select("dataset").eq("id", "kai-aircraft-english").maybeSingle(),
+      ]);
       if (!active) return;
       if (result.error) {
         setSaveError("Supabase에서 내 기록을 불러오지 못했습니다. 새로고침해서 다시 시도해 주세요.");
@@ -63,8 +69,11 @@ function AccountStore({ user, authReady, children }: { user: User | null; authRe
       }
       revision.current = result.data?.revision ?? null;
       const initial = result.data ? { ...EMPTY, ...(result.data.payload as Partial<Persisted>) } : EMPTY;
+      if (initial.dataset?.origin === "demo") initial.dataset = null;
       saved.current = initial;
       setState(initial);
+      setTextbook((book.data?.dataset as Dataset | undefined) ?? null);
+      if (book.error || !book.data) setSaveError("기본 교재를 불러오지 못했습니다. 페이지를 새로고침해 주세요.");
       setLoaded(true);
     })();
     return () => { active = false; };
@@ -92,10 +101,16 @@ function AccountStore({ user, authReady, children }: { user: User | null; authRe
 
   const patch = (change: Partial<Persisted>) => setState((current) => ({ ...current, ...change }));
   const patchDataset = (update: (dataset: Dataset) => Dataset) =>
-    setState((current) => current.dataset ? { ...current, dataset: update(current.dataset) } : current);
+    setState((current) => {
+      const dataset = current.dataset ?? textbook;
+      return dataset ? { ...current, dataset: update(dataset) } : current;
+    });
 
   return <Context.Provider value={{
     ...state, user, ready: authReady && loaded, saveError, saving,
+    dataset: state.dataset ?? textbook,
+    textbookAvailable: Boolean(textbook),
+    hasCustomDataset: Boolean(state.dataset),
     setDataset: (dataset) => patch({ dataset }),
     setNotes: (notes) => patch({ notes }),
     setPatternMode: (patternMode) => patch({ patternMode }),

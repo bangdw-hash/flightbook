@@ -87,14 +87,14 @@ export function NoDataState() {
   return (
     <EmptyState
       title="아직 불러온 자료가 없습니다"
-      body="시연 데이터로 둘러보거나 교재 TXT 파일을 불러오세요."
+      body="로그인하면 기본 교재를 볼 수 있습니다. 첫 화면에서 시연 자료도 열 수 있습니다."
       action={
         <>
           <Link to="/" className="btn btn-outline">
             <BookOpen className="h-4 w-4" aria-hidden /> 처음 화면
           </Link>
           <Link to="/data" className="btn btn-primary">
-            <Upload className="h-4 w-4" aria-hidden /> 교재 TXT 불러오기
+            <Upload className="h-4 w-4" aria-hidden /> 자료 관리
           </Link>
         </>
       }

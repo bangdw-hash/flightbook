@@ -114,7 +114,7 @@ function Shell() {
           </Link>
           <Link to="/data" className="btn btn-outline text-sm" activeProps={{ className: "btn btn-teal text-sm" }}>
             <ArrowUpDown className="h-4 w-4" aria-hidden />
-            <span>불러오기·내보내기</span>
+            <span>자료 관리</span>
           </Link>
         </div>
         <nav aria-label="주요 메뉴" className="mx-auto max-w-5xl overflow-x-auto px-2">
