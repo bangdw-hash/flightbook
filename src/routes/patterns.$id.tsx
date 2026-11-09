@@ -1,3 +1,4 @@
+import { SpeakingPractice } from "@/components/speaking-practice";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useStore } from "@/lib/store";
@@ -44,6 +45,7 @@ function Detail() {
         {p.examples.map((e) => (
           <li key={e.num} className="card-paper px-4 py-3">
             <p><span className="mr-2 font-mono text-xs text-teal">{e.num}</span>{e.en}</p>
+            <SpeakingPractice key={e.en} text={e.en} />
             {patternMode === "book" || shown[e.num] ? <p className="mt-1 text-muted-foreground">{e.ko || "(번역 없음)"}</p>
               : <button className="btn btn-outline mt-2 !min-h-[40px] text-sm" onClick={() => setShown({ ...shown, [e.num]: true })}>번역 보기</button>}
           </li>

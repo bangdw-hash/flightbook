@@ -1,3 +1,4 @@
+import { SpeakingPractice } from "@/components/speaking-practice";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useStore } from "@/lib/store";
@@ -66,7 +67,8 @@ function Notes() {
           {notes.map((n) => (
             <li key={n.id} className="card-paper p-4">
               <p className="font-semibold">{n.term} <span className="font-normal text-muted-foreground">— {n.meaning}</span></p>
-              {n.example && <p className="mt-1 text-sm italic">{n.example}</p>}
+              <SpeakingPractice key={`term:${n.term}`} text={n.term} />
+              {n.example && <div className="mt-3"><p className="text-sm italic" lang="en">{n.example}</p><SpeakingPractice key={n.example} text={n.example} /></div>}
               {n.memo && <p className="mt-1 text-sm text-muted-foreground">{n.memo}</p>}
               <div className="mt-2 flex flex-wrap gap-2"><button className="btn btn-outline !min-h-[40px] text-sm" onClick={() => setDraft(n)}>편집</button><button className="btn btn-danger !min-h-[40px] text-sm" onClick={() => confirm("삭제할까요?") && setNotes(notes.filter((x) => x.id !== n.id))}>삭제</button>{user && <button className="btn btn-outline !min-h-[40px] text-sm" aria-pressed={Boolean(n.shared)} onClick={() => { if (draft.id === n.id) setDraft({ ...draft, shared: !n.shared }); setNotes(notes.map((x) => x.id === n.id ? { ...x, shared: !x.shared } : x)); }}>{n.shared ? "공유 해제" : "초대한 수강생에게 공유"}</button>}</div>
             </li>

@@ -1,3 +1,4 @@
+import { SpeakingPractice } from "@/components/speaking-practice";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useStore } from "@/lib/store";
@@ -34,6 +35,7 @@ function Detail() {
       <Link to="/glossary" className="text-sm text-teal">← 용어집</Link>
       <PageTitle title={t.term} sub={<span className="inline-flex gap-1">{t.sources.map((s) => <SourceBadge key={s} s={s} />)}</span>}
         right={<Segmented label="보기 방식" value={glossaryMode} onChange={(m) => { setGlossaryMode(m); setReveal(false); }} options={[{ value: "full", label: "전체 설명" }, { value: "short", label: "짧은 뜻" }]} />} />
+      <div className="mb-4"><SpeakingPractice key={t.term} text={t.term} /></div>
       <div className="card-paper p-4">
         {glossaryMode === "short" && !reveal ? <button className="btn btn-outline" onClick={() => setReveal(true)}>뜻 보기</button> : (
           <>
