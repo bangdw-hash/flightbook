@@ -10,6 +10,7 @@ export function SpeakingPractice({ text, onComplete }: { text: string; onComplet
   const [remaining, setRemaining] = useState(0);
   const [duration, setDuration] = useState(0);
   const [message, setMessage] = useState("");
+  const [speechFailed, setSpeechFailed] = useState(false);
   const [ipa, setIpa] = useState<ReturnType<typeof pronunciationWords> | null>(null);
   const [showIpa, setShowIpa] = useState(false);
   const timer = useRef<number | null>(null);
@@ -54,9 +55,38 @@ export function SpeakingPractice({ text, onComplete }: { text: string; onComplet
     setRemaining(0);
   }
 
+  function startRepeat(length: number) {
+    stopActive?.();
+    ownStop.current = stop;
+    stopActive = stop;
+    const deadline = performance.now() + length * 1000;
+    setDuration(length);
+    setRemaining(length);
+    setPhase("repeat");
+    timer.current = window.setInterval(() => {
+      const next = Math.max(0, (deadline - performance.now()) / 1000);
+      setRemaining(next);
+      if (next === 0) {
+        if (timer.current !== null) window.clearInterval(timer.current);
+        timer.current = null;
+        if (stopActive === stop) stopActive = null;
+        setPhase("done");
+        onComplete?.();
+      }
+    }, 80);
+  }
+
+  function practiceWithoutAudio() {
+    setMessage("");
+    const wordCount = text.trim().split(/\s+/).length;
+    startRepeat(Math.max(3, wordCount / 2 + 1));
+  }
+
   function play(rate: number) {
     setMessage("");
+    setSpeechFailed(false);
     if (!("speechSynthesis" in window) || !("SpeechSynthesisUtterance" in window)) {
+      setSpeechFailed(true);
       setMessage("이 브라우저에서는 영어 음성을 재생할 수 없습니다.");
       return;
     }
@@ -74,27 +104,13 @@ export function SpeakingPractice({ text, onComplete }: { text: string; onComplet
     speech.onend = () => {
       if (utterance.current !== speech) return;
       utterance.current = null;
-      const length = Math.max(3, (performance.now() - started) / 1000 + 1);
-      const deadline = performance.now() + length * 1000;
-      setDuration(length);
-      setRemaining(length);
-      setPhase("repeat");
-      timer.current = window.setInterval(() => {
-        const next = Math.max(0, (deadline - performance.now()) / 1000);
-        setRemaining(next);
-        if (next === 0) {
-          if (timer.current !== null) window.clearInterval(timer.current);
-          timer.current = null;
-          if (stopActive === stop) stopActive = null;
-          setPhase("done");
-          onComplete?.();
-        }
-      }, 80);
+      startRepeat(Math.max(3, (performance.now() - started) / 1000 + 1));
     };
     speech.onerror = () => {
       if (utterance.current !== speech) return;
       utterance.current = null;
       stop();
+      setSpeechFailed(true);
       setMessage("영어 음성을 재생하지 못했습니다. 기기의 영어 음성 설정을 확인해 주세요.");
     };
     ownStop.current = stop;
@@ -111,6 +127,7 @@ export function SpeakingPractice({ text, onComplete }: { text: string; onComplet
       </button>
       <button type="button" className="btn btn-outline !min-h-[40px] text-xs" onClick={() => play(0.75)}>천천히 듣기</button>
       <button type="button" className="btn btn-outline !min-h-[40px] text-xs" aria-expanded={showIpa} onClick={() => void toggleIpa()}>발음기호</button>
+      {speechFailed && phase !== "listening" && phase !== "repeat" && <button type="button" className="btn btn-outline !min-h-[40px] text-xs" onClick={practiceWithoutAudio}>음성 없이 연습</button>}
       {(phase === "listening" || phase === "repeat") && <button type="button" className="btn btn-outline !min-h-[40px] text-xs" onClick={() => stopActive?.()}><Square className="h-3 w-3" aria-hidden /> 중지</button>}
     </div>
     {showIpa && <div className="rounded border border-border p-2 text-sm">
