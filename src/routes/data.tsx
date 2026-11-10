@@ -5,7 +5,7 @@ import { download, examplesCsv, notesCsv, parseExportJson, patternsCsv, termsCsv
 import { LocalOnly, PageTitle } from "@/components/fb";
 
 export const Route = createFileRoute("/data")({
-  head: () => ({ meta: [{ title: "자료 관리 · 플라이트북" }, { name: "description", content: "기본 교재와 JSON/CSV 내보내기" }, { property: "og:title", content: "불러오기·내보내기" }, { property: "og:description", content: "기본 교재, JSON·CSV 내보내기" }] }),
+  head: () => ({ meta: [{ title: "자료 관리 · 항공기술영어 가이드북" }, { name: "description", content: "기본 교재와 JSON/CSV 내보내기" }, { property: "og:title", content: "불러오기·내보내기" }, { property: "og:description", content: "기본 교재, JSON·CSV 내보내기" }] }),
   component: Data,
 });
 
@@ -24,7 +24,7 @@ function Data() {
   const applyJson = () => {
     if (!user) { setErr("내 계정에 저장하려면 먼저 로그인하세요."); return; }
     if (!json || !confirm("현재 내 계정의 자료와 나만의 용어집을 JSON 내용으로 교체합니다. 계속할까요?")) return;
-    setDataset(json.patterns.length || json.terms.length ? { origin: json.origin ?? "import", label: json.label || "가져온 JSON", patterns: json.patterns, terms: json.terms } : null);
+    setDataset(json.patterns.length || json.terms.length ? { origin: json.origin === "demo" ? "demo" : "import", label: json.label || "가져온 JSON", patterns: json.patterns, terms: json.terms } : null);
     setNotes(json.notes.map((note) => ({ ...note, shared: false }))); setJson(null); setOk("JSON을 가져왔습니다.");
   };
   const d = new Date().toISOString().slice(0, 10);

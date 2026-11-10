@@ -9,9 +9,9 @@ import { FlightArt, LocalOnly, PageTitle, SourceBadge } from "@/components/fb";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "항공영어 플라이트북 · 전체 목록" },
+      { title: "항공기술영어 가이드북 · 전체 목록" },
       { name: "description", content: "항공정비 현장 패턴영어와 용어를 한곳에서 검색하는 학습 노트" },
-      { property: "og:title", content: "항공영어 플라이트북" },
+      { property: "og:title", content: "항공기술영어 가이드북" },
       { property: "og:description", content: "항공정비 현장 패턴영어와 용어를 한곳에서 검색하는 학습 노트" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -51,7 +51,9 @@ function Index() {
       <section className="hero-ink relative overflow-hidden rounded-2xl px-6 py-10 sm:px-10 sm:py-14">
         <FlightArt className="pointer-events-none absolute -right-6 top-0 w-[340px] text-teal-soft opacity-80" />
         <p className="relative font-mono text-xs tracking-widest opacity-80">KAI 기체제작 실무과정</p>
-        <h1 className="relative mt-2 font-serif text-3xl font-bold sm:text-4xl">항공영어 플라이트북</h1>
+        <h1 className="relative mt-2 font-serif text-3xl font-bold sm:text-4xl">항공기술영어 가이드북</h1>
+        <p className="relative mt-3 font-serif text-lg font-semibold">항공기술영어</p>
+        <p lang="en" className="relative mt-1 text-base font-semibold text-teal-soft sm:text-lg">Aircraft Technical English</p>
         <p className="relative mt-3 max-w-md opacity-90">현장 패턴영어와 용어를 한 권의 노트처럼 찾아보고, 복습하고, 테스트하세요.</p>
         <div className="relative mt-7 flex flex-col gap-2 sm:flex-row">
           {!user && <button className="btn btn-teal" onClick={() => { setDataset(demoDataset()); if (!notes.length) setNotes(demoNotes()); }}>
@@ -67,6 +69,7 @@ function Index() {
   ];
   return (
     <>
+      <p className="mb-2 text-sm font-semibold text-teal">항공기술영어 <span className="mx-1" aria-hidden="true">·</span> <span lang="en">Aircraft Technical English</span></p>
       <PageTitle title="전체 목록" sub={`${dataset?.label ?? "자료 없음"} · 패턴 ${dataset?.patterns.length ?? 0} · 용어 ${dataset?.terms.length ?? 0} · 나만의 ${notes.length}`} />
       <label className="relative block">
         <span className="sr-only">검색</span>

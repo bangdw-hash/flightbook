@@ -7,7 +7,7 @@ import type { Note } from "@/lib/types";
 import { supabase } from "@/lib/supabase";
 
 export const Route = createFileRoute("/notes")({
-  head: () => ({ meta: [{ title: "나만의 용어집 · 플라이트북" }, { name: "description", content: "이 브라우저에만 저장되는 개인 용어 노트" }, { property: "og:title", content: "나만의 용어집" }, { property: "og:description", content: "개인 용어 노트" }] }),
+  head: () => ({ meta: [{ title: "나만의 용어집 · 항공기술영어 가이드북" }, { name: "description", content: "이 브라우저에만 저장되는 개인 용어 노트" }, { property: "og:title", content: "나만의 용어집" }, { property: "og:description", content: "개인 용어 노트" }] }),
   component: Notes,
 });
 

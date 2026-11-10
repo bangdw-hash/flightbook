@@ -17,3 +17,11 @@ declare module "@tanstack/react-router" {
 }
 
 createRoot(document.getElementById("root")!).render(<RouterProvider router={router} />);
+
+if (import.meta.env.PROD && "serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    void navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`).catch((error) => {
+      console.warn("Flightbook service worker registration failed", error);
+    });
+  });
+}

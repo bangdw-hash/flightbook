@@ -5,7 +5,7 @@ import { shortMeaning } from "@/lib/parser";
 import { NoDataState, PageTitle, SourceBadge } from "@/components/fb";
 
 export const Route = createFileRoute("/glossary/")({
-  head: () => ({ meta: [{ title: "항공정비 현장 용어집 · 플라이트북" }, { name: "description", content: "교재 용어집과 패턴 어휘 통합 목록" }, { property: "og:title", content: "현장 용어집" }, { property: "og:description", content: "통합 용어 목록" }] }),
+  head: () => ({ meta: [{ title: "항공정비 현장 용어집 · 항공기술영어 가이드북" }, { name: "description", content: "교재 용어집과 패턴 어휘 통합 목록" }, { property: "og:title", content: "현장 용어집" }, { property: "og:description", content: "통합 용어 목록" }] }),
   component: Glossary,
 });
 

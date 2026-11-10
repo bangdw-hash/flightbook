@@ -12,6 +12,7 @@ import { ArrowUpDown, Plane } from "lucide-react";
 import appCss from "../styles.css?url";
 import { StoreProvider, useStore } from "../lib/store";
 import { Account } from "../components/account";
+import { InstallApp } from "../components/install-app";
 
 function NotFoundComponent() {
   return (
@@ -59,9 +60,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "항공영어 플라이트북" },
+      { title: "항공기술영어 가이드북" },
       { name: "description", content: "KAI 기체제작 실무과정 항공정비 현장 패턴영어·용어 학습 쇼케이스" },
-      { property: "og:title", content: "항공영어 플라이트북" },
+      { property: "og:title", content: "항공기술영어 가이드북" },
       { property: "og:description", content: "KAI 기체제작 실무과정 항공정비 현장 패턴영어·용어 학습 쇼케이스" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -103,16 +104,16 @@ function Shell() {
       </a>
       <header className="sticky top-0 z-30 border-b border-border bg-card/95 backdrop-blur">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-2">
-          <Link to="/" className="flex min-h-[44px] items-center gap-2 font-serif text-lg font-bold">
-            <span className="grid h-8 w-8 place-items-center rounded-lg bg-ink text-ink-foreground">
+          <Link to="/" className="flex min-h-[44px] items-center gap-2 font-serif text-base font-bold sm:text-lg">
+            <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-ink text-ink-foreground">
               <Plane className="h-4 w-4 -rotate-45" aria-hidden />
             </span>
             <span>
-              플라이트북
+              항공기술영어 가이드북
               {dataset?.origin === "demo" && <span className="ml-2 align-middle chip bg-warn-soft text-warn">시연</span>}
             </span>
           </Link>
-          <Link to="/data" className="btn btn-outline text-sm" activeProps={{ className: "btn btn-teal text-sm" }}>
+          <Link to="/data" className="btn btn-outline shrink-0 text-sm" activeProps={{ className: "btn btn-teal shrink-0 text-sm" }}>
             <ArrowUpDown className="h-4 w-4" aria-hidden />
             <span>자료 관리</span>
           </Link>
@@ -138,6 +139,7 @@ function Shell() {
         </nav>
       </header>
       <div className="mx-auto max-w-5xl px-4 pt-3"><Account />{saving && <p role="status" className="text-sm">Supabase에 저장하는 중…</p>}</div>
+      <InstallApp />
       {saveError && (
         <p role="alert" className="mx-auto mt-3 max-w-5xl rounded-lg bg-warn-soft px-4 py-2 text-sm text-warn">
           {saveError}

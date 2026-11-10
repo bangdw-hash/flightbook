@@ -7,7 +7,7 @@ export interface ExportFile {
   app: typeof EXPORT_APP;
   version: number;
   exportedAt: string;
-  origin: Dataset["origin"] | null;
+  origin: Dataset["origin"] | "textbook" | null;
   label: string;
   patterns: Pattern[];
   terms: Term[];

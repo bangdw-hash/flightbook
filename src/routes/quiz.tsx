@@ -5,7 +5,7 @@ import { buildQuiz, isCorrect, quizItems, type Question, type QuizScope, type Qu
 import { PageTitle, Segmented } from "@/components/fb";
 
 export const Route = createFileRoute("/quiz")({
-  head: () => ({ meta: [{ title: "학습 테스트 · 플라이트북" }, { name: "description", content: "뜻 고르기·빈칸·단답 테스트" }, { property: "og:title", content: "학습 테스트" }, { property: "og:description", content: "세 가지 학습 테스트" }] }),
+  head: () => ({ meta: [{ title: "학습 테스트 · 항공기술영어 가이드북" }, { name: "description", content: "뜻 고르기·빈칸·단답 테스트" }, { property: "og:title", content: "학습 테스트" }, { property: "og:description", content: "세 가지 학습 테스트" }] }),
   component: Quiz,
 });
 

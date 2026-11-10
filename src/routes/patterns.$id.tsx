@@ -1,3 +1,4 @@
+import { ExamplePractice } from "@/components/example-practice";
 import { SpeakingPractice } from "@/components/speaking-practice";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
@@ -7,7 +8,7 @@ import { NoDataState, PageTitle, Segmented, SourceBadge } from "@/components/fb"
 import type { Pattern } from "@/lib/types";
 
 export const Route = createFileRoute("/patterns/$id")({
-  head: ({ params }) => ({ meta: [{ title: `Pattern ${params.id} · 플라이트북` }, { name: "description", content: "패턴 상세: 예문과 번역" }, { property: "og:title", content: `Pattern ${params.id}` }, { property: "og:description", content: "패턴 상세" }] }),
+  head: ({ params }) => ({ meta: [{ title: `Pattern ${params.id} · 항공기술영어 가이드북` }, { name: "description", content: "패턴 상세: 예문과 번역" }, { property: "og:title", content: `Pattern ${params.id}` }, { property: "og:description", content: "패턴 상세" }] }),
   component: Detail,
 });
 
@@ -41,6 +42,7 @@ function Detail() {
       <PageTitle title={p.title} sub={<><span className="font-mono">Pattern {p.id}</span> · {p.meaning}</>}
         right={<Segmented label="보기 방식" value={patternMode} onChange={setPatternMode} options={[{ value: "book", label: "교재형" }, { value: "review", label: "복습형" }]} />} />
       {p.usage.map((u, i) => <p key={i} className="text-sm text-muted-foreground">{u}</p>)}
+      <ExamplePractice key={p.id} examples={p.examples} showTranslation={patternMode === "book"} />
       <ol className="mt-4 space-y-3">
         {p.examples.map((e) => (
           <li key={e.num} className="card-paper px-4 py-3">

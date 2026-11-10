@@ -5,7 +5,7 @@ import { pronunciationWords } from "@/lib/pronunciation";
 type Phase = "idle" | "listening" | "repeat" | "done";
 let stopActive: (() => void) | null = null;
 
-export function SpeakingPractice({ text }: { text: string }) {
+export function SpeakingPractice({ text, onComplete }: { text: string; onComplete?: () => void }) {
   const [phase, setPhase] = useState<Phase>("idle");
   const [remaining, setRemaining] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -74,7 +74,7 @@ export function SpeakingPractice({ text }: { text: string }) {
     speech.onend = () => {
       if (utterance.current !== speech) return;
       utterance.current = null;
-      const length = Math.max(0.5, (performance.now() - started) / 1000);
+      const length = Math.max(3, (performance.now() - started) / 1000 + 1);
       const deadline = performance.now() + length * 1000;
       setDuration(length);
       setRemaining(length);
@@ -87,6 +87,7 @@ export function SpeakingPractice({ text }: { text: string }) {
           timer.current = null;
           if (stopActive === stop) stopActive = null;
           setPhase("done");
+          onComplete?.();
         }
       }, 80);
     };

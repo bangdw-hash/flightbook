@@ -4,7 +4,7 @@ import { useStore } from "@/lib/store";
 import { NoDataState, PageTitle } from "@/components/fb";
 
 export const Route = createFileRoute("/patterns/")({
-  head: () => ({ meta: [{ title: "항공정비 현장 패턴영어 · 플라이트북" }, { name: "description", content: "번호별 현장 패턴영어 목록" }, { property: "og:title", content: "현장 패턴영어" }, { property: "og:description", content: "번호별 현장 패턴영어 목록" }] }),
+  head: () => ({ meta: [{ title: "항공정비 현장 패턴영어 · 항공기술영어 가이드북" }, { name: "description", content: "번호별 현장 패턴영어 목록" }, { property: "og:title", content: "현장 패턴영어" }, { property: "og:description", content: "번호별 현장 패턴영어 목록" }] }),
   component: Patterns,
 });
 

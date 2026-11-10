@@ -7,7 +7,7 @@ import { NoDataState, PageTitle, Segmented, SourceBadge } from "@/components/fb"
 import type { Term } from "@/lib/types";
 
 export const Route = createFileRoute("/glossary/$id")({
-  head: () => ({ meta: [{ title: "용어 상세 · 플라이트북" }, { name: "description", content: "용어 뜻·설명·출처 패턴" }, { property: "og:title", content: "용어 상세" }, { property: "og:description", content: "용어 상세" }] }),
+  head: () => ({ meta: [{ title: "용어 상세 · 항공기술영어 가이드북" }, { name: "description", content: "용어 뜻·설명·출처 패턴" }, { property: "og:title", content: "용어 상세" }, { property: "og:description", content: "용어 상세" }] }),
   component: Detail,
 });
 
