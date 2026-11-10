@@ -66,7 +66,7 @@ export function LocalOnly({ children }: { children?: ReactNode }) {
       <HardDrive className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
       <span>
         {children ??
-          "로그인하면 내 기록을 Supabase에 저장합니다. 로그인 없이 보는 시연 자료는 화면을 새로 열면 초기화됩니다."}
+          "기본 교재는 누구나 열람할 수 있습니다. 로그인하면 나만의 용어집과 교재 편집본을 계정에 저장할 수 있습니다."}
       </span>
     </p>
   );
@@ -87,7 +87,7 @@ export function NoDataState() {
   return (
     <EmptyState
       title="아직 불러온 자료가 없습니다"
-      body="로그인하면 기본 교재를 볼 수 있습니다. 첫 화면에서 시연 자료도 열 수 있습니다."
+      body="기본 교재를 불러오지 못했다면 페이지를 새로고침해 주세요."
       action={
         <>
           <Link to="/" className="btn btn-outline">

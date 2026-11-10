@@ -14,7 +14,7 @@ export const Route = createFileRoute("/patterns/$id")({
 
 function Detail() {
   const { id } = Route.useParams();
-  const { dataset, patternMode, setPatternMode, updatePattern, deletePattern } = useStore();
+  const { user, dataset, patternMode, setPatternMode, updatePattern, deletePattern } = useStore();
   const nav = useNavigate();
   const [shown, setShown] = useState<Record<string, boolean>>({});
   const [edit, setEdit] = useState<Pattern | null>(null);
@@ -65,10 +65,10 @@ function Detail() {
           );
         })}
       </ul>
-      <div className="mt-6 flex gap-2">
+      {user && <div className="mt-6 flex gap-2">
         <button className="btn btn-outline" onClick={() => setEdit(p)}>편집</button>
         <button className="btn btn-danger" onClick={() => { if (confirm("이 패턴을 삭제할까요?")) { deletePattern(p.id); nav({ to: "/patterns" }); } }}>삭제</button>
-      </div>
+      </div>}
     </>
   );
 }

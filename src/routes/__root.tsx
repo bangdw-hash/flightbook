@@ -96,7 +96,7 @@ const NAV = [
 ] as const;
 
 function Shell() {
-  const { ready, saveError, saving, dataset } = useStore();
+  const { ready, saveError, saving } = useStore();
   return (
     <div className="min-h-screen">
       <a href="#main" onClick={(event) => { event.preventDefault(); document.getElementById("main")?.focus(); }} className="sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 focus:z-50 btn btn-primary">
@@ -110,7 +110,6 @@ function Shell() {
             </span>
             <span>
               항공기술영어 가이드북
-              {dataset?.origin === "demo" && <span className="ml-2 align-middle chip bg-warn-soft text-warn">시연</span>}
             </span>
           </Link>
           <Link to="/data" className="btn btn-outline shrink-0 text-sm" activeProps={{ className: "btn btn-teal shrink-0 text-sm" }}>

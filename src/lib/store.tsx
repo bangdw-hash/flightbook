@@ -32,6 +32,22 @@ interface Store extends Persisted {
 const Context = createContext<Store | null>(null);
 
 export function StoreProvider({ children }: { children: ReactNode }) {
+  const [book, setBook] = useState<{ dataset: Dataset | null; loaded: boolean }>({ dataset: null, loaded: false });
+  useEffect(() => {
+    const db = supabase;
+    if (!db) {
+      setBook({ dataset: null, loaded: true });
+      return;
+    }
+    let active = true;
+    void (async () => {
+      const { data, error } = await db.from("flightbook_textbooks").select("dataset")
+        .eq("id", "kai-aircraft-english").maybeSingle();
+      if (active) setBook({ dataset: error ? null : (data?.dataset as Dataset | undefined) ?? null, loaded: true });
+    })();
+    return () => { active = false; };
+  }, []);
+
   const [auth, setAuth] = useState<{ user: User | null; loaded: boolean }>({ user: null, loaded: !supabase });
   useEffect(() => {
     if (!supabase) return;
@@ -40,13 +56,18 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     });
     return () => data.subscription.unsubscribe();
   }, []);
-  return <AccountStore key={auth.user?.id ?? "guest"} user={auth.user} authReady={auth.loaded}>{children}</AccountStore>;
+  return <AccountStore key={auth.user?.id ?? "guest"} user={auth.user} authReady={auth.loaded} textbook={book.dataset} textbookReady={book.loaded}>{children}</AccountStore>;
 }
 
-function AccountStore({ user, authReady, children }: { user: User | null; authReady: boolean; children: ReactNode }) {
+function AccountStore({ user, authReady, textbook, textbookReady, children }: {
+  user: User | null;
+  authReady: boolean;
+  textbook: Dataset | null;
+  textbookReady: boolean;
+  children: ReactNode;
+}) {
   const id = user?.id;
   const [state, setState] = useState<Persisted>(EMPTY);
-  const [textbook, setTextbook] = useState<Dataset | null>(null);
   const [loaded, setLoaded] = useState(!id);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
@@ -58,10 +79,8 @@ function AccountStore({ user, authReady, children }: { user: User | null; authRe
     if (!db || !id) return;
     let active = true;
     void (async () => {
-      const [result, book] = await Promise.all([
-        db.from("flightbook_accounts").select("payload,revision").eq("owner_id", id).maybeSingle(),
-        db.from("flightbook_textbooks").select("dataset").eq("id", "kai-aircraft-english").maybeSingle(),
-      ]);
+      const result = await db.from("flightbook_accounts").select("payload,revision")
+        .eq("owner_id", id).maybeSingle();
       if (!active) return;
       if (result.error) {
         setSaveError("Supabase에서 내 기록을 불러오지 못했습니다. 새로고침해서 다시 시도해 주세요.");
@@ -72,8 +91,6 @@ function AccountStore({ user, authReady, children }: { user: User | null; authRe
       if (initial.dataset?.origin === "demo") initial.dataset = null;
       saved.current = initial;
       setState(initial);
-      setTextbook((book.data?.dataset as Dataset | undefined) ?? null);
-      if (book.error || !book.data) setSaveError("기본 교재를 불러오지 못했습니다. 페이지를 새로고침해 주세요.");
       setLoaded(true);
     })();
     return () => { active = false; };
@@ -100,14 +117,17 @@ function AccountStore({ user, authReady, children }: { user: User | null; authRe
   }, [id, loaded, state, saving, saveError]);
 
   const patch = (change: Partial<Persisted>) => setState((current) => ({ ...current, ...change }));
-  const patchDataset = (update: (dataset: Dataset) => Dataset) =>
+  const patchDataset = (update: (dataset: Dataset) => Dataset) => {
+    if (!id) return;
     setState((current) => {
       const dataset = current.dataset ?? textbook;
       return dataset ? { ...current, dataset: update(dataset) } : current;
     });
+  };
 
   return <Context.Provider value={{
-    ...state, user, ready: authReady && loaded, saveError, saving,
+    ...state, user, ready: authReady && (loaded || Boolean(saveError)) && textbookReady, saving,
+    saveError: saveError ?? (textbookReady && !textbook ? "기본 교재를 불러오지 못했습니다. 페이지를 새로고침해 주세요." : null),
     dataset: state.dataset ?? textbook,
     textbookAvailable: Boolean(textbook),
     hasCustomDataset: Boolean(state.dataset),

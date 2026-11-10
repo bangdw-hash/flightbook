@@ -32,7 +32,7 @@ function Data() {
   return (
     <>
       <PageTitle title="자료 관리" />
-      <LocalOnly>기본 교재는 로그인하면 자동으로 표시됩니다. 교재를 편집하면 내 계정에 편집본을 저장합니다.</LocalOnly>
+      <LocalOnly>기본 교재는 로그인 없이 볼 수 있습니다. 로그인하면 교재 편집본을 내 계정에 저장할 수 있습니다.</LocalOnly>
       {err && <p role="alert" className="mt-3 text-destructive">{err}</p>}
       {ok && <p role="status" className="mt-3 rounded-lg bg-teal-soft px-3 py-2 text-sm">{ok}</p>}
 

@@ -13,7 +13,7 @@ export const Route = createFileRoute("/glossary/$id")({
 
 function Detail() {
   const { id } = Route.useParams();
-  const { dataset, glossaryMode, setGlossaryMode, updateTerm, deleteTerm } = useStore();
+  const { user, dataset, glossaryMode, setGlossaryMode, updateTerm, deleteTerm } = useStore();
   const nav = useNavigate();
   const [reveal, setReveal] = useState(false);
   const [edit, setEdit] = useState<Term | null>(null);
@@ -51,10 +51,10 @@ function Detail() {
         </div>
       )}
       {t.raws.length > 0 && <details className="mt-4 text-sm"><summary className="cursor-pointer">원문 어휘 줄 확인</summary><ul className="mt-2 list-disc pl-5">{t.raws.map((r) => <li key={r}>{r}</li>)}</ul></details>}
-      <div className="mt-6 flex gap-2">
+      {user && <div className="mt-6 flex gap-2">
         <button className="btn btn-outline" onClick={() => setEdit(t)}>편집</button>
         <button className="btn btn-danger" onClick={() => { if (confirm("이 용어를 삭제할까요?")) { deleteTerm(t.id); nav({ to: "/glossary" }); } }}>삭제</button>
-      </div>
+      </div>}
     </>
   );
 }

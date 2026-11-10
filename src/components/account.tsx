@@ -23,7 +23,7 @@ export function Account() {
       setBusy(false);
     }
   }
-  if (!supabase) return <p className="text-sm">시연 모드 · Supabase 연결이 준비되면 계정 저장을 사용할 수 있습니다.</p>;
+  if (!supabase) return <p className="text-sm">계정 서비스에 연결하지 못했습니다.</p>;
   if (user) return <div className="flex flex-wrap items-center gap-2 text-sm"><span>{user.email}</span><button className="btn btn-outline" onClick={async () => { const result = await supabase?.auth.signOut(); setMessage(result?.error?.message ?? ""); }}>로그아웃</button>{message && <span role="status">{message}</span>}</div>;
   return <details className="text-sm">
     <summary className="cursor-pointer font-semibold">로그인 / 회원가입</summary>
